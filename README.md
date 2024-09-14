@@ -96,7 +96,7 @@ def train_and_evaluate(
     # Training code here
 ```
 ## Evaluation
-###Evaluation Metrics
+### Evaluation Metrics
 The model's performance is evaluated using loss and accuracy metrics for both training and validation datasets. Results are visualized using matplotlib.
 ```bash
 def plot_results(train_losses, train_accuracies, val_losses, val_accuracies):
