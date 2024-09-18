@@ -1,46 +1,46 @@
 # Age Group Multi-Class Classification using Neural Network
 
-This project involves building and training a neural network to classify age groups based on customer data. The project utilizes PyTorch for model building and training, and includes data preprocessing, model evaluation, and prediction functionalities.
+Tento projekt zahŕňa vybudovanie a tréning neurónovej siete na klasifikáciu vekových skupín na základe údajov o zákazníkoch. Projekt využíva PyTorch na vytváranie modelov a školenia a zahŕňa funkcie predspracovania údajov, vyhodnocovania modelov a predikcie.
 
-## Table of Contents
-- [Project Overview](#project-overview)
-- [Requirements](#requirements)
-- [Data](#data)
+## Obsah
+- [Prehľad projektu](#prehľad-projektu)
+- [Požiadavky](#požiadavky)
+- [Údaje](#údaje)
 - [Model](#model)
-- [Training](#training)
-- [Evaluation](#evaluation)
-- [Prediction](#prediction)
-- [Usage](#usage)
-- [License](#license)
+- [Tréning](#tréning)
+- [Hodnotenie](#hodnotenie)
+- [Predikcie](#predikcie)
+- [Použitie](#použitie)
+- [Licencia](#licencia)
 
-## Project Overview
-This project aims to classify customer age groups into predefined categories: 
+## Prehľad projektu
+Cieľom tohto projektu je klasifikovať vekové skupiny zákazníkov do vopred definovaných kategórií:
 - Youth (<25)
 - Young Adults (25-34)
 - Adults (35-64)
 - Seniors (64+)
 
-It includes:
-- Data preprocessing and encoding
-- Neural network architecture definition
-- Training and evaluation of the model
-- Making predictions on new data
+Zahŕňa:
+- Predspracovanie a kódovanie údajov
+- Definícia architektúry neurónovej siete
+- Trenovani a hodnotenie modelu
+- Predpovedanie nových údajov
 
-## Requirements
+## Požiadavky
 - Python 3.x
 - PyTorch
-- Pandas
+- Pandy
 - NumPy
 - Matplotlib
-- Scikit-learn
+- Scikit-učte sa
 
-You can install the required packages using pip:
+Požadované balíčky môžete nainštalovať pomocou pip:
 
-```bash
-pip install torch pandas numpy matplotlib scikit-learn
+``` bash
+pip install pochodeň pandy numpy matplotlib scikit-learn
 ```
-## Data
-The dataset used in this project contains the following columns:
+## Údaje
+Súbor údajov použitý v tomto projekte obsahuje nasledujúce stĺpce:
 
 Customer_Age,
 Customer_Gender,
@@ -50,39 +50,44 @@ Product_Category,
 Order_Quantity,
 Profit,
 Revenue.
-## Model
-### Neural Network Architecture
-The neural network model AgeGroupNN is defined with the following layers:
 
-Input layer,
-Two hidden layers with batch normalization and dropout,
-Output layer with 4 units corresponding to the age groups.
-```bash
+## Model
+### Architektúra neurónovej siete
+Model neurónovej siete AgeGroupNN je definovaný s nasledujúcimi vrstvami:
+
+Vstupná vrstva,
+Dve skryté vrstvy s normalizáciou a dropout,
+Výstupná vrstva so 4 neuronmi zodpovedajúcimi vekovým skupinám.
+``` bash
 class AgeGroupNN(nn.Module):
-    def __init__(self, in_features=8, hl1=32, hl2=16, out_features=4):
+    def __init__(self, in_features=8, hl1=80, hl2=60, hl3=20, out_features=4):
         super(AgeGroupNN, self).__init__()
-        self.fc3 = nn.Linear(in_features, hl1)
-        self.bn3 = nn.BatchNorm1d(hl1)
-        self.fc4 = nn.Linear(hl1, hl2)
-        self.bn4 = nn.BatchNorm1d(hl2)
-        self.dropout4 = nn.Dropout(0.2)
-        self.fc5 = nn.Linear(hl2, out_features)
+        self.fc1 = nn.Linear(in_features, hl1)
+        self.fc3 = nn.Linear(hl1, hl2)
+        self.bn3 = nn.BatchNorm1d(hl2)
+        self.dropout3 = nn.Dropout(0.2)
+        self.fc4 = nn.Linear(hl2, hl3)
+        self.bn4 = nn.BatchNorm1d(hl3)
+        self.dropout4 = nn.Dropout(0.1)
+        self.fc5 = nn.Linear(hl3, out_features)
 
     def forward(self, x):
+        x = torch.relu(self.fc1(x))
         x = torch.relu(self.bn3(self.fc3(x)))
+        x = self.dropout3(x)  # (zakomentované) aplikácia dropout
         x = torch.relu(self.bn4(self.fc4(x)))
         x = self.dropout4(x)
         x = self.fc5(x)
         return x
 ```
-## Training
-### Training Process
-The training process involves:
+## Tréning
+### Tréningový proces
+Tréningový proces zahŕňa:
 
-Training the model for a specified number of epochs,
-Implementing early stopping to prevent overfitting,
-Tracking training and validation losses and accuracies.
-```bash
+Tréning modelu pre určený počet epoch,
+Implementácia early stoping, aby sa zabránilo nadmernému overfitting,
+Sledovanie strát a presností treningu a hodnotenia.
+``` bash
 def train_and_evaluate(
     model,
     train_loader,
@@ -95,38 +100,38 @@ def train_and_evaluate(
 ):
     # Training code here
 ```
-## Evaluation
-### Evaluation Metrics
-The model's performance is evaluated using loss and accuracy metrics for both training and validation datasets. Results are visualized using matplotlib.
-```bash
+## Hodnotenie
+### Metriky hodnotenia
+Výkonnosť modelu sa hodnotí pomocou metrík straty a presnosti pre tréningové aj validacne súbory údajov. Výsledky sú vizualizované pomocou matplotlib.
+``` bash
 def plot_results(train_losses, train_accuracies, val_losses, val_accuracies):
     # Plotting code here
 ```
-## Prediction
-### Predict Function
-The predict_age_group function allows you to make predictions on new data.
-```bash
+## Predpoveď
+### Funkcia predpovedania
+Funkcia predict_age_group vám umožňuje predpovedať nové údaje.
+``` bash
 def predict_age_group(model, input_data, scaler, ordinal_encoder):
     # Prediction code here
 ```
-### Generating Sample Data
-You can generate random sample data for testing the prediction function.
-```bash
+### Predikcie
+Môžete vygenerovať náhodné vzorové údaje na testovanie funkcie predikcie.
+``` bash
 def generate_input_data():
     # Data generation code here
 ```
-## Usage
-1. Generate Input Data:
-```bash
+## Použitie
+1. Generovanie vstupných údajov:
+``` bash
 input_data = generate_input_data()
 ```
-2. Make Predictions:
-```bash
+2. Predikcie:
+``` bash
 predictions = predict_age_group(model, input_data, scaler, ordinal_encoder)
 ```
-3. Visualize Results:
-```bash
+3. Vizualizujte výsledky:
+``` bash
 plot_results(train_losses, train_accuracies, val_losses, val_accuracies)
 ```
-## License
-This project is licensed under the MIT License - see the LICENSE file for details.
+## Licencia
+Tento projekt je licencovaný pod licenciou MIT – podrobnosti nájdete v súbore LICENCIA.
